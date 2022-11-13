@@ -220,13 +220,16 @@ func (c *Client) CoinsID(id string, localization bool, tickers bool, marketData 
 }
 
 // CoinsIDTickers /coins/{id}/tickers
-func (c *Client) CoinsIDTickers(id string, page int) (*types.CoinsIDTickers, error) {
+func (c *Client) CoinsIDTickers(id string, exchange_ids string, page int) (*types.CoinsIDTickers, error) {
 	if len(id) == 0 {
 		return nil, fmt.Errorf("id is required")
 	}
 	params := url.Values{}
 	if page > 0 {
 		params.Add("page", format.Int2String(page))
+	}
+	if len(exchange_ids) > 0 {
+		params.Add("exchange_ids", exchange_ids)
 	}
 	url := fmt.Sprintf("%s/coins/%s/tickers?%s", baseURL, id, params.Encode())
 	resp, err := c.MakeReq(url)
